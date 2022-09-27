@@ -36,7 +36,7 @@ class DBClient {
     return new Promise((r, e) =>{
       that.dbo.collection(collection).insertOne(data, function(err, res) {
         if (err) throw err;
-        r("单条数据插入成功")
+        r({status: 200})
       });
     })
   }

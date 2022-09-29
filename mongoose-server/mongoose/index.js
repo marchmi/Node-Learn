@@ -7,6 +7,7 @@ class DBClient {
     db = mongoose.connection
     url = undefined
     dbName = undefined
+    modelName = undefined
     schema = null
     model = null
     constructor(url, dbName){
@@ -15,26 +16,75 @@ class DBClient {
     }
 
     connect() {
-        console.log(`${this.url + this.dbName}`)
         mongoose.connect(`${this.url + this.dbName}`)
         this.db.once('open',()=>{
             console.log('数据库连接成功……')
         })
     }
 
+    // 更新schema, return this
     updateSchema(schemaName) {
-        this.schema = new Schema(SchemaConfig[schemaName])
+        const arg = [...arguments]
+        arg.shift()
+        this.schema = new Schema(SchemaConfig[schemaName],...arg)
+        this.model = null // model置空
+        this.modelName = schemaName // updateModel时使用
+        return this
     }
 
-    updateModel(modelName) {
-        this.model = Model(modelName, this.schema)
+    updateModel() {
+        if(!this.schema){
+            throw new Error(`不能在实例化schema对象之前调用mongoose.model`)
+        }
+        this.model = Model(this.modelName, this.schema)
     }
 
-    create(data,cb) {
-        this.model.create(data,(err , docs)=>{
+    // 用于在Schema定义之后为Schema添加字段
+    schemaAddField(config) {
+        if(!this.schema){
+            throw new Error(`不能在实例化schema对象之前调用schema.add方法`)
+        }
+        this.schema.add(config)
+        return this
+    }
+
+    // 插入单条数据
+    create(data, cb) {
+        this.model.create(data, (err, docs)=>{
+            if(err){
+                throw err
+            }
             cb(docs)
         })
     }
+
+    // 插入多条数据
+    createMany(data, cb) {
+        this.model.insertMany(data, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            cb(docs)
+        })
+    }
+
+    // 查询数据
+    find() {
+        // Model.find(conditions, [projection], [options], [callback])
+        // conditions：查询条件
+        // [projection]：控制返回字段
+        // [options]：配置查询参数
+        // [callback]：回调函数–function(err,docs){}
+        const args = [...arguments]
+        args.pop()
+        this.model.find(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            arguments[args.length](docs)
+        })
+    }
+
 }
 
 module.exports = DBClient

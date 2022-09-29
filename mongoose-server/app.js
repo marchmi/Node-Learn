@@ -2,25 +2,68 @@ const DBClient = require('./mongoose')
 const client = new DBClient('mongodb://localhost:27017/', 'mongoose')
 
 client.connect()
-client.updateSchema('grade')
-client.updateModel('grade')
+client.updateSchema('grade',{ timestamps: true }).updateModel()
 const data = {
-    name: '一年级',
-    discribe: '小学一年级，6-7岁',
-    code: 1
+    name: '二年级',
+    discribe: '小学二年级，学生年龄7-8岁',
+    code: 2
 }
-client.create(data,(docs)=>{
+client.create(data, (docs)=>{
     console.log(`插入${docs}成功`)
 })
 
 client.updateSchema('class')
-client.updateModel('class')
+client.schemaAddField({floor: Number})
+client.updateModel()
 const classData = {
     name: '一班',
-    code: 1
+    code: 1,
+    floor: 3
 }
-client.create(classData,(docs)=>{
+client.create(classData, (docs)=>{
     console.log(`插入${docs}成功`)
+})
+
+const classArray = [
+    {
+        name: '二班',
+        code: 2,
+        floor: 3
+    },
+    {
+        name: '三班',
+        code: 3,
+        floor: 3
+    }
+]
+
+client.createMany(classArray, (docs)=>{
+    console.log(`插入${docs}成功`)
+})
+
+// 直接查询出所有数据
+client.find((docs) =>{
+    console.log(`查询到数据${docs.length}条`)
+})
+
+// 查找code值>=2的数据
+client.find({code: {$gte: 2}}, (docs) =>{
+    console.log(`查询到符合条件的数据${docs.length}条`)
+})
+
+// 查找name中带有三，code值>=2的数据
+client.find({name: /三/, code: {$gte: 2}}, (docs) =>{
+    console.log(`查询到符合条件的数据${docs.length}条`)
+})
+
+// _id默认会返回 查找name中带有三，code值>=2的数据，只返回name
+client.find({name: /三/, code: {$gte: 2}}, {name: 1, _id: 0 }, (docs) =>{
+    console.log(`查询数据，按照指定的字段返回${docs}`)
+})
+
+// 跳过前两条数据，返回其余符合条件的数据
+client.find(null, null, {skip: 2}, (docs) =>{
+    console.log(`查询数据，按照指定的字段返回${docs}`)
 })
 
 const Server = require('./server')

@@ -16,5 +16,15 @@ module.exports = {
     class: {
         name: String,
         code: Number
+    },
+    teacher: {
+        name: String,
+        age: Number,
+        gender: {
+            type: String,
+            default: 'male',
+        },
+        phone: String,
+        addr: String
     }
 }

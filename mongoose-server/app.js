@@ -1,15 +1,26 @@
-var mongoose = require('mongoose')
-//连接数据库
-mongoose.connect('mongodb://localhost:27017/flicker')
+const DBClient = require('./mongoose')
+const client = new DBClient('mongodb://localhost:27017/', 'mongoose')
 
-const db = mongoose.connection
-
-//监听数据库连接状态
-db.once('open',()=>{
-    console.log('数据库连接成功……')
+client.connect()
+client.updateSchema('grade')
+client.updateModel('grade')
+const data = {
+    name: '一年级',
+    discribe: '小学一年级，6-7岁',
+    code: 1
+}
+client.create(data,(docs)=>{
+    console.log(`插入${docs}成功`)
 })
-db.once('close',()=>{
-    console.log('数据库断开……')
+
+client.updateSchema('class')
+client.updateModel('class')
+const classData = {
+    name: '一班',
+    code: 1
+}
+client.create(classData,(docs)=>{
+    console.log(`插入${docs}成功`)
 })
 
 const Server = require('./server')

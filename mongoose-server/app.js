@@ -2,6 +2,11 @@ const DBClient = require('./mongoose')
 const client = new DBClient('mongodb://localhost:27017/', 'mongoose')
 
 client.connect()
+// client.updateSchema('student',{ timestamps: true }).updateModel()
+// client.create({}, (docs)=>{
+//     console.log(`插入${docs}成功`)
+// }) // student validation failed: name: Path `name` is required.
+
 client.updateSchema('grade',{ timestamps: true }).updateModel()
 const data = {
     name: '二年级',

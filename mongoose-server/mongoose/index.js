@@ -1,13 +1,14 @@
 const mongoose = require('mongoose')
+const ObjectId = require('mongodb').ObjectId
 const Schema = mongoose.Schema
 const Model = mongoose.model
 const SchemaConfig = require('../configs/schema')
 
 class DBClient {
     db = mongoose.connection
-    url = undefined
-    dbName = undefined
-    modelName = undefined
+    url = void 0
+    dbName = void 0
+    modelName = void 0
     schema = null
     model = null
     constructor(url, dbName){
@@ -32,6 +33,17 @@ class DBClient {
         return this
     }
 
+    // 绑定钩子函数
+    /**
+     * 
+     * @param {pre|post} hookType
+     * @param {*} operate 
+     * @param {*} fn 
+     */
+    bindHook(hookType, operate, fn) {
+        this.schema[hookType](operate,fn)
+    }
+
     updateModel() {
         if(!this.schema){
             throw new Error(`不能在实例化schema对象之前调用mongoose.model`)
@@ -50,7 +62,7 @@ class DBClient {
 
     // 插入单条数据
     create(data, cb) {
-        this.model.create(data, (err, docs)=>{
+        return this.model.create(data, (err, docs)=>{
             if(err){
                 throw err
             }
@@ -60,7 +72,7 @@ class DBClient {
 
     // 插入多条数据
     createMany(data, cb) {
-        this.model.insertMany(data, (err, docs)=>{
+        return this.model.insertMany(data, (err, docs)=>{
             if(err){
                 throw err
             }
@@ -77,10 +89,174 @@ class DBClient {
         // [callback]：回调函数–function(err,docs){}
         const args = [...arguments]
         args.pop()
-        this.model.find(...args, (err, docs)=>{
+        return this.model.find(...args, (err, docs)=>{
             if(err){
                 throw err
             }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 查询单条数据
+    findOne() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.findOne(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 查询单条数据
+    findById() {
+        const args = [...arguments]
+        args.pop()
+        args[0] = new ObjectId(args[0])
+        return this.model.findById(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // $where 使用
+    findByWhere() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.find(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 更新数据 会更新所有符合条件的文档
+    update() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.update(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 只更新一个文档
+    updateOne() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.updateOne(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 更新所有
+    updateMany() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.updateMany(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 查找更新
+    findSave() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.find(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 查找单个更新
+    findOneSave() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.findOne(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // Model的remove，倾向于得到一整个操作结果
+    modelRemove() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.remove(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // document的remove，每一次有符合条件的文档被删除，都获取一次文档信息
+    documentRemove() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.find(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            docs.forEach(doc=>{
+                doc.remove((err, doc)=>{
+                    // callback()
+                    arguments[args.length](doc)
+                })
+            })
+        })
+    }
+
+    // 删除符合条件的一条数据
+    findOneAndRemove() {
+        const args = [...arguments]
+        args.pop()
+        return this.model.findOneAndRemove(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
+            arguments[args.length](docs)
+        })
+    }
+
+    // 通过id删除数据
+    findByIdAndRemove() {
+        const args = [...arguments]
+        args[0] = new ObjectId(args[0])
+        args.pop()
+        return this.model.findByIdAndRemove(...args, (err, docs)=>{
+            if(err){
+                throw err
+            }
+            // callback()
             arguments[args.length](docs)
         })
     }

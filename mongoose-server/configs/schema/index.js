@@ -28,13 +28,22 @@ module.exports = {
         }
     },
     grade: {
-        name: String,
-        discribe: String,
-        code: Number
+        gradeName: {  // 2022级
+            type: String,
+            required: true,
+            validate: nameLength
+        },
+        gradeCode: {  // 2022
+            type: String,
+            required: true
+        },
+        describe: String
     },
     class: {
-        name: String,
-        code: Number
+        className: String,
+        classCode: Number,
+        gradeCode: String,
+        describe: String
     },
     teacher: {
         name: String,

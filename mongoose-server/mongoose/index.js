@@ -60,10 +60,23 @@ class DBClient {
         return this
     }
 
+    // 聚合方法
+    async aggregate(){
+        return new Promise((r, e) => {
+            const args = [...arguments]
+            return this.model.aggregate(args, (err, docs) => {
+                if(err){
+                    e({code: 204, err})
+                }
+                r({code: 200, docs})
+            })
+        })
+    }
+
     // 插入单条数据
     async create(data) {
         return new Promise((r, e) =>{
-            this.model.create(data, (err, docs)=>{
+            this.model.create(data, (err, docs) => {
                 if(err){
                     e({code: 204, err})
                 }
@@ -74,7 +87,7 @@ class DBClient {
 
     // 插入多条数据
     createMany(data, cb) {
-        return this.model.insertMany(data, (err, docs)=>{
+        return this.model.insertMany(data, (err, docs) => {
             if(err){
                 throw err
             }
@@ -90,7 +103,7 @@ class DBClient {
         // [options]：配置查询参数
         // [callback]：回调函数–function(err,docs){}
         const args = [...arguments]
-        return this.model.find(...args, (err, docs)=>{
+        return this.model.find(...args, (err, docs) => {
             if(err){
                 throw err
             }
@@ -102,7 +115,7 @@ class DBClient {
     // 查询单条数据
     findOne() {
         const args = [...arguments]
-        return this.model.findOne(...args, (err, docs)=>{
+        return this.model.findOne(...args, (err, docs) => {
             if(err){
                 throw err
             }
@@ -158,7 +171,7 @@ class DBClient {
     updateOne() {
         const args = [...arguments]
         return new Promise((r, e) =>{
-            this.model.updateOne(...args, (err, docs)=>{
+            this.model.updateOne(...args, (err, docs) => {
                 if(err){
                     e({code: 204, err})
                 }

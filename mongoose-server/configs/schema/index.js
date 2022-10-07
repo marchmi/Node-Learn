@@ -34,7 +34,7 @@ module.exports = {
             validate: nameLength
         },
         gradeCode: {  // 2022
-            type: String,
+            type: Number,
             required: true
         },
         describe: String
@@ -42,7 +42,7 @@ module.exports = {
     class: {
         className: String,
         classCode: Number,
-        gradeCode: String,
+        gradeCode: Number,
         describe: String
     },
     teacher: {

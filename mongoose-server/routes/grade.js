@@ -3,6 +3,28 @@ const router = express.Router()
 const client = require('../mongoose/client')
 const tools = require('../utils/tools')
 
+router.get('/lists', async(req, response, next) => {
+    try {
+        const { body, baseUrl, path, query } = req
+        const option = {
+            limit: parseInt(query.pageSize),
+            page: parseInt(query.pageNum),
+            sort: { gradeCode: -1 },               // 排序
+            lean: true,
+            // populate: '',
+            select: 'describe gradeName gradeCode' // 设置需要返回的字段，默认带_id
+        },
+            filter = {...query}
+            delete filter.pageSize
+            delete filter.pageNum
+        client.updateSchema(tools.replacePathLine(baseUrl),{ timestamps: true }).updateModel()
+        const result = await client.paginate(filter,option)
+        response.send(result)
+    } catch (error) {
+        console.log(error)
+        next(error)
+    }
+})
 
 router.get('/list', async(req, response, next) => {
     try {

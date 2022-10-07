@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+var mongoosePaginate = require('mongoose-paginate');
 const ObjectId = require('mongodb').ObjectId
 const Schema = mongoose.Schema
 const Model = mongoose.model
@@ -28,6 +29,7 @@ class DBClient {
         const arg = [...arguments]
         arg.shift()
         this.schema = new Schema(SchemaConfig[schemaName],...arg)
+        this.schema.plugin(mongoosePaginate)
         this.modelName = schemaName // updateModel时使用
         return this
     }
@@ -60,11 +62,24 @@ class DBClient {
         return this
     }
 
+    // 分页方法 query option
+    async paginate(query, option){
+        return new Promise((r, e) => {
+            const args = [...arguments]
+            this.model.paginate(...args, (err, result) => {
+                if(err){
+                    e({code: 204, err})
+                }
+                r({code: 200, result})
+            })
+        })
+    }
+
     // 聚合方法
     async aggregate(){
         return new Promise((r, e) => {
             const args = [...arguments]
-            return this.model.aggregate(args, (err, docs) => {
+            this.model.aggregate(args, (err, docs) => {
                 if(err){
                     e({code: 204, err})
                 }

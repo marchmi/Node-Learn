@@ -1,0 +1,26 @@
+// routes/route/users.js
+
+const router = require("koa-router")();
+// 模块路由前缀
+router.prefix("/users");
+
+router.get("/", function (ctx, next) {
+	ctx.body = "this a users response!";
+});
+
+/**
+ * 用户登录接口
+ * @param {username} 用户名
+ * @param {password} 用户密码
+ */
+router.post("/login", async (ctx) => {
+	const request = ctx.request.body;
+	const { username, password } = request;
+	if (username&&password) {
+        ctx.res.$success('登录成功');
+    } else {
+        ctx.res.$error("请求失败", 403);
+    }
+});
+
+module.exports = router;

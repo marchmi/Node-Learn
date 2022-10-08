@@ -26,8 +26,6 @@ module.exports = async (ctx, next) => {
       }
       ctx.body = _data;
     };
-
-    console.log(`绑定$success方法和$error方法`)
-  
+    
     await next();
   };

@@ -30,6 +30,11 @@ module.exports = appInfo => {
     key: '2333',
   }; // 最终将在启动时合并到app.config.appMiddleware
 
+  // 跨域相关：https://www.eggjs.org/zh-CN/basics/controller#session
+  config.security = { // 直接关闭CSRF验证，不推荐 https://www.eggjs.org/zh-CN/basics/router#%E5%8F%82%E6%95%B0%E8%8E%B7%E5%8F%96
+    csrf: false,
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

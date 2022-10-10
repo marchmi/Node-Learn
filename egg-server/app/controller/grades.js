@@ -26,7 +26,7 @@ class GradesController extends Controller {
 
   async create() {
     const { ctx } = this;
-    ctx.body = `${JSON.stringify(ctx.request.body)}`;
+    ctx.body = ctx.request.body;
   }
 
   async update() {

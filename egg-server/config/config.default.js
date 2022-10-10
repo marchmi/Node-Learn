@@ -1,4 +1,5 @@
 /* eslint valid-jsdoc: "off" */
+/* 可以通过 app.config 从 Application 实例上获取到 config 对象，也可以在 Controller, Service, Helper 的实例上通过 this.config 获取到 config 对象 */
 
 'use strict';
 

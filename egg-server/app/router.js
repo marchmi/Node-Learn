@@ -9,6 +9,5 @@ module.exports = app => {
   const part = app.middleware.part(); // 单参数则为app.middleware.part(options, app)
   router.get('/', part, controller.home.index);
 
-  router.resources('grades', '/api/grades', controller.grades); // RESTful 风格的 URL 定义
-  // app.router.get('/grades/:id/:name', controller.grades.info); // 多个参数
+  require('./router/grades')(app); //  推荐egg-router-plus插件或者定义一个方法，自动载入某个文件夹下的路由进行注册
 };

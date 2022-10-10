@@ -35,6 +35,15 @@ module.exports = appInfo => {
     csrf: false,
   };
 
+  config.mongoose = {
+    url: process.env.EGG_MONGODB_URL || 'mongodb://127.0.0.1/flicker',
+    options: {
+      server: {
+        poolSize: 40,
+      },
+    },
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

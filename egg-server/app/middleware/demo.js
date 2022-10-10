@@ -1,4 +1,4 @@
-// 支持两个可选参数options与app
+// 支持两个可选参数options与app 中间件使用方式doc：https://blog.csdn.net/weixin_40629244/article/details/105089566
 module.exports = options => {
   return async function demo(ctx, next) {
     await next();

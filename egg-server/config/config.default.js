@@ -18,6 +18,7 @@ module.exports = appInfo => {
 
   /**
    * config.middleware = [ 'prev', 'demo', 'before' ]; next分隔执行语句 执行顺序为：prev-> demo -> before | before-> demo ->prev
+   * 框架和插件不支持在 config.default.js 中匹配的 middleware 查看文档https://www.eggjs.org/zh-CN/basics/middleware
    */
   // add your middleware config here
   config.middleware = [ 'prev', 'demo', 'before' ];

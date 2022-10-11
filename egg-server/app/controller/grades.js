@@ -16,7 +16,7 @@ const { Controller } = require('egg');
 class GradesController extends Controller {
   async index() {
     const { ctx } = this; // ctx.query get请求参数 ctx.request.body post请求提交参数
-    console.log(this.app.mongoose); // https://blog.csdn.net/sd19871122/article/details/122276538
+    // console.log(this.app.mongoose); // https://blog.csdn.net/sd19871122/article/details/122276538
     ctx.body = `${JSON.stringify(ctx.query)}`;
   }
 

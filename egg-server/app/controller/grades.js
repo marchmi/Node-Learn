@@ -17,7 +17,9 @@ class GradesController extends Controller {
   async index() {
     const { ctx } = this; // ctx.query get请求参数 ctx.request.body post请求提交参数
     // console.log(this.app.mongoose); // https://blog.csdn.net/sd19871122/article/details/122276538
-    ctx.body = `${JSON.stringify(ctx.query)}`;
+    const result = await ctx.service.grades.find();
+    // ctx.body = `${JSON.stringify(ctx.query)}`;
+    ctx.body = result;
   }
 
   async show() {
@@ -27,6 +29,8 @@ class GradesController extends Controller {
 
   async create() {
     const { ctx } = this;
+    const result = await ctx.service.grades.create(ctx.request.body);
+    ctx.body = result;
     ctx.body = ctx.request.body;
   }
 

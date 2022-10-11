@@ -5,7 +5,11 @@ const { Service } = require('egg');
 class GradesService extends Service {
   async find() {
     const { ctx } = this;
-    const result = await ctx.model.Grades.paginate();
+    const { query } = ctx;
+    const filter = { ...query };
+    delete filter.pageNum;
+    delete filter.pageSize;
+    const result = await ctx.model.Grades.paginate(filter, ctx.helper.getValidPageSize(ctx, ctx.model.Grades));
     return result;
   }
 

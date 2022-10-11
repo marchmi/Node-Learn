@@ -32,15 +32,16 @@ module.exports = appInfo => {
 
   // 跨域相关：https://www.eggjs.org/zh-CN/basics/controller#session
   config.security = { // 直接关闭CSRF验证，不推荐 https://www.eggjs.org/zh-CN/basics/router#%E5%8F%82%E6%95%B0%E8%8E%B7%E5%8F%96
-    csrf: false,
+    csrf: { enable: false },
   };
 
   config.mongoose = {
     url: process.env.EGG_MONGODB_URL || 'mongodb://127.0.0.1/flicker',
     options: {
-      server: {
-        poolSize: 40, // 连接池数量：https://static2.cnodejs.org/topic/5b471c93e374eeab6929d657
-      },
+      // server: { // 为什么要去掉外层的server：https://segmentfault.com/q/1010000010447504
+      poolSize: 40, // 连接池数量：https://static2.cnodejs.org/topic/5b471c93e374eeab6929d657
+      useUnifiedTopology: true, // https://blog.csdn.net/xuelang532777032/article/details/124712178
+      // },
     },
   };
 

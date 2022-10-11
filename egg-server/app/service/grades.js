@@ -5,7 +5,7 @@ const { Service } = require('egg');
 class GradesService extends Service {
   async find() {
     const { ctx } = this;
-    const result = await ctx.model.Grades.find();
+    const result = await ctx.model.Grades.paginate();
     return result;
   }
 

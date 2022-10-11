@@ -31,7 +31,6 @@ class GradesController extends Controller {
     const { ctx } = this;
     const result = await ctx.service.grades.create(ctx.request.body);
     ctx.body = result;
-    ctx.body = ctx.request.body;
   }
 
   async update() {

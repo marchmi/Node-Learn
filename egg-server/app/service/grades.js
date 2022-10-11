@@ -4,12 +4,22 @@ const { Service } = require('egg');
 
 class GradesService extends Service {
   async find() {
-    const result = await this.ctx.model.Grades.find();
+    const { ctx } = this;
+    const result = await ctx.model.Grades.find();
     return result;
   }
 
   async create(data) {
-    const result = await this.ctx.model.Grades.create(data);
+    const { ctx } = this;
+
+    // 不可添加gradeCode取值相同的数据
+    const grades = await ctx.model.Grades.find({ gradeCode: data.gradeCode });
+    console.log(grades);
+    if (grades.length) {
+      return ctx.response.repetitive({ message: `已存在一条gradeCode为${data.gradeCode}的数据` });
+    }
+
+    const result = await ctx.model.Grades.create(data);
     return result;
   }
 }

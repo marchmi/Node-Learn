@@ -25,10 +25,10 @@ module.exports = appInfo => {
    * ignore：设置符合某些规则的请求不经过这个中间件。
    */
   // add your middleware config here
-  config.middleware = [ 'prev', 'demo', 'before' ];
-  config.demo = {
-    key: '2333',
-  }; // 最终将在启动时合并到app.config.appMiddleware
+  config.middleware = [ ];
+  // config.demo = {
+  //   key: '2333',
+  // }; // 最终将在启动时合并到app.config.appMiddleware
 
   // 跨域相关：https://www.eggjs.org/zh-CN/basics/controller#session
   config.security = { // 直接关闭CSRF验证，不推荐 https://www.eggjs.org/zh-CN/basics/router#%E5%8F%82%E6%95%B0%E8%8E%B7%E5%8F%96

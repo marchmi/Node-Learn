@@ -35,6 +35,13 @@ module.exports = appInfo => {
     csrf: { enable: false },
   };
 
+  // cors 配置跨域：https://www.jianshu.com/p/1abb56b57746  增强插件：https://juejin.cn/post/6844903733130690574
+  config.cors = {
+    origin: '*',
+    allowMethods: 'GET, HEAD, PUT, POST, DELETE, PATCH',
+    credentials: true,
+  };
+
   config.mongoose = {
     url: process.env.EGG_MONGODB_URL || 'mongodb://127.0.0.1/flicker',
     options: {

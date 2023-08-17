@@ -49,6 +49,14 @@ class GradesService extends Service {
     const result = await ctx.model.Grades.create(newDoc);
     return result;
   }
+
+  async updateOne(uuid, data) {
+    const { ctx } = this;
+
+    const result = await ctx.model.Grades.findOneAndUpdate({ uuid }, data, { new: true });
+    return result;
+  }
+
 }
 
 module.exports = GradesService;

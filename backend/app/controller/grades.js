@@ -35,7 +35,7 @@ class GradesController extends Controller {
 
   async update() {
     const { ctx } = this;
-    ctx.body = `${JSON.stringify(ctx.request.body)}`;
+    ctx.body = await ctx.service.grades.updateOne(ctx.request.body.uuid, ctx.request.body);
   }
 
   async destroy() {

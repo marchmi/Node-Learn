@@ -16,7 +16,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1691474135958_7005';
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = [ 'errorHandler' ];
 
   config.mongoose = {
     url: process.env.EGG_MONGODB_URL || 'mongodb://127.0.0.1/flicker',

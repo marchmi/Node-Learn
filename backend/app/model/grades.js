@@ -11,6 +11,7 @@ module.exports = app => {
     },
     gradeCode: {
       type: String,
+      unique: true,
     },
     sort: {
       type: Number,
@@ -18,8 +19,9 @@ module.exports = app => {
     img: {
       type: String,
     },
-    remarks: {
+    remark: {
       type: String,
+      default: '',
     },
     createdAt: {
       type: Date,

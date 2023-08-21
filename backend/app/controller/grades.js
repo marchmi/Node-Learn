@@ -35,7 +35,12 @@ class GradesController extends Controller {
 
   async update() {
     const { ctx } = this;
-    ctx.body = await ctx.service.grades.updateOne(ctx.request.body.uuid, ctx.request.body);
+    const result = await ctx.service.grades.updateOne(ctx.params.id, ctx.request.body);
+    if (!result) {
+      ctx.body = { code: 201, message: `未查询到uuid：${ctx.params.id}相关的文档` }; // 采用RESTful风格的路由时，默认path参数为id
+      return;
+    }
+    ctx.body = result;
   }
 
   async destroy() {

@@ -7,11 +7,10 @@ module.exports = () => {
       console.log(err.name);
       if (err.name === 'MongoServerError') {
         // 处理 MongoDB 错误并返回适当的响应
-        ctx.status = 500;
-        ctx.body = { error: 'Internal Server Error' };
+        ctx.body = { status: 403, error: err };
       } else {
         // 将其他类型的错误继续向下传递
-        throw err;
+        ctx.body = err;
       }
     }
   };

@@ -19,6 +19,7 @@
   "dependencies": {
     "body-parser": "^1.20.0",
     "cors": "^2.8.5",
+    "egg-cors": "^2.2.3",
     "express": "^4.18.1",
     "mongodb": "^4.10.0",
     "mongoose": "^6.6.2",

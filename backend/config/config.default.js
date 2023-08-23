@@ -33,6 +33,11 @@ module.exports = appInfo => {
     csrf: { enable: false },
   };
 
+  config.cors = {
+    origin: 'http://localhost:8090', // 设置允许跨域的源，可根据需要修改为特定的源地址，如'http://localhost:3000'
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH', // 设置允许跨域请求的HTTP方法
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

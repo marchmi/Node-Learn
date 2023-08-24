@@ -8,12 +8,21 @@ class ViewsService extends Service {
     const { ctx } = this;
 
     // 获取分页参数，默认是第一页，每页10条记录
-    const { page = 1, pageSize = 10 } = ctx.query;
+    const { pageNum = 1, pageSize = 10, keyword } = ctx.query;
 
     // 构建查询条件
     const query = {};
 
-    const skip = (page - 1) * pageSize; // 计算跳过的记录条数
+    if (keyword) {
+      const regex = new RegExp(keyword, 'i');
+      query.$or = [
+        { type: { $regex: regex } },
+        { viewName: { $regex: regex } },
+      ];
+    } // 'i' 表示不区分大小写
+
+
+    const skip = (pageNum - 1) * pageSize; // 计算跳过的记录条数
 
     // 使用Model的find方法进行查询，加上条件和分页参数
     const result = await ctx.model.Views.find(query, { _id: 0, __v: 0 })
@@ -26,9 +35,11 @@ class ViewsService extends Service {
     const totalPages = Math.ceil(total / pageSize); // 计算总页数
 
     return {
-      result,
-      total,
-      totalPages,
+      data: {
+        list: result || [],
+        total,
+        totalPages,
+      },
     };
   }
 
@@ -48,14 +59,36 @@ class ViewsService extends Service {
     const newDoc = { ...data, uuid: newUUID };
 
     const result = await ctx.model.Views.create(newDoc);
-    return result;
+
+    const response = {
+      data: {
+        message: '创建成功',
+      },
+    };
+    return result ? response : null;
   }
 
   async updateOne(uuid, data) {
     const { ctx } = this;
+    const result = await ctx.model.Views.findOneAndUpdate({ uuid }, data, { new: false }); // { new: true } 返回更新后的文档
 
-    const result = await ctx.model.Views.findOneAndUpdate({ uuid }, data, { new: true }); // { new: true } 返回更新后的文档
-    return result;
+    const response = {
+      data: {
+        message: '更新成功',
+      },
+    };
+    return result ? response : null;
+  }
+
+  async deleteOne(uuid) {
+    const { ctx } = this;
+    const result = await ctx.model.Views.findOneAndDelete({ uuid }, { new: false }); // { new: true } 返回更新后的文档
+    const response = {
+      data: {
+        message: '删除成功',
+      },
+    };
+    return result ? response : null;
   }
 
 }

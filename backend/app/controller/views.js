@@ -45,10 +45,11 @@ class ViewsController extends Controller {
 
   async destroy() {
     const { ctx } = this;
-    ctx.body = `${JSON.stringify(ctx.request.body)}`;
+    const result = await ctx.service.views.deleteOne(ctx.params.id);
+    ctx.body = result;
   }
 
-  async enum() {
+  async enum() { // 获取枚举数据
     const { ctx } = this;
     const result = await ctx.service.views.enum();
     ctx.body = result;
